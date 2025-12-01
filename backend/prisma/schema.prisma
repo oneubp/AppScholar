@@ -21,17 +21,29 @@ model Usuario {
 }
 
 
+model Curso {
+  id            Int         @id @default(autoincrement())
+  nome          String      @unique // Nome do curso deve ser único
+  area          String
+  duracaoAnos   Int         // Duração em anos
+  coordenador   String
+  alunos        Aluno[]     // Lista de alunos vinculados a este curso
+}
+
 model Aluno {
   id        Int      @id @default(autoincrement())
   nome      String
   matricula String   @unique
-  curso     String?
+  // O campo 'curso' string deve ser removido ou alterado
+  
+  cursoId   Int?       // NOVO: ID do curso de destino
+  curso     Curso?     @relation(fields: [cursoId], references: [id]) // NOVO: Relação com a tabela Curso
+
   notas     Nota[]
 
   // RELAÇÃO INVERSA COM USUARIO
   usuario   Usuario?
 }
-
 model Professor {
   id            Int       @id @default(autoincrement())
   nome          String

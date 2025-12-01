@@ -5,7 +5,6 @@ exports.criarDisciplina = async (req, res) => {
   try {
     const { nome, carga, professorId } = req.body;
 
-    // Verifica se o professor existe
     const professor = await prisma.professor.findUnique({
       where: { id: professorId }
     });
