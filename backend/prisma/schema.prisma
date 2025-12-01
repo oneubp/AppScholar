@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres:plo43754@localhost:5432/scholar?schema=public"
+}
+
+model Usuario {
+  id           Int        @id @default(autoincrement())
+  nome         String
+  matricula    String     @unique
+  senha        String
+
+  aluno        Aluno?     @relation(fields: [alunoId], references: [id])
+  alunoId      Int?       @unique
+
+  professor    Professor? @relation(fields: [professorId], references: [id])
+  professorId  Int?       @unique
+}
+
+
+model Aluno {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  matricula String   @unique
+  curso     String?
+  notas     Nota[]
+
+  // RELAÇÃO INVERSA COM USUARIO
+  usuario   Usuario?
+}
+
+model Professor {
+  id            Int       @id @default(autoincrement())
+  nome          String
+  titulacao     String
+  tempoDocencia Int
+  disciplinas   Disciplina[]
+  usuario       Usuario?
+}
+
+model Disciplina {
+  id        Int     @id @default(autoincrement())
+  nome      String
+  carga     Int
+
+  professorId Int?
+  professor  Professor? @relation(fields: [professorId], references: [id])
+
+  notas     Nota[]
+}
+
+model Nota {
+  id            Int        @id @default(autoincrement())
+  alunoId       Int
+  disciplinaId  Int
+  n1            Float
+  n2            Float
+  n3            Float
+  faltas        Int       @default(0) // CORREÇÃO APLICADA AQUI
+  
+  aluno         Aluno       @relation(fields: [alunoId], references: [id])
+  disciplina    Disciplina  @relation(fields: [disciplinaId], references: [id])
+}

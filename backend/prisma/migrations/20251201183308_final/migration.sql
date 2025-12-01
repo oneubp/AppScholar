@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Nota" ADD COLUMN     "faltas" INTEGER NOT NULL DEFAULT 0;
